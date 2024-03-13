@@ -1,13 +1,14 @@
 import React from "react";
 import TodoItem from "./TodoItem";
+import * as S from "../styles/TodoBoardStyle"
 
-function TodoBoard({todoList, onRemove, checkItem}) {
+function TodoBoard({ todoList, onRemove }) {
 
-    return(
+    return (
         <div className="task-list">
-            <ul className="task-list">
-                {todoList.map( (todoItem,index) => <TodoItem index={index} todoItem={todoItem} onRemove={onRemove} />)}
-            </ul>
+            <S.TodoList className="task-list">
+                {todoList.map((todoItem, index) => <TodoItem index={index} todoItem={todoItem} onRemove={onRemove} />)}
+            </S.TodoList>
         </div>
 
     );
