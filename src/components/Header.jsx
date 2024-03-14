@@ -10,11 +10,17 @@ const Header = () => {
     const goTodoList = () => {
         navigate("/todoList");
     };
+
+    // const emptyStorage = () => {
+    //     localStorage.setItem("todoList", JSON.stringify([]));
+    // }
+
     return(
         <>
             <S.NavBox>
                 <S.NavButton onClick={goHome}>HOME</S.NavButton>
                 <S.NavButton onClick={goTodoList}>TO DO LIST</S.NavButton>
+                {/* <S.NavButton onClick={emptyStorage}>empty Storage</S.NavButton> */}
             </S.NavBox>
             <main>
                 <Outlet />
