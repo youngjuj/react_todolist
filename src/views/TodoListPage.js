@@ -15,8 +15,8 @@ const TodoListPage = () => {
     // useState는 비동기 방식이라 바로 반영된 콘솔찍고 싶으면 useEffect로 찍어보기
     // 끝에 [] 있으면 딱 한 번 실행, 또는 안에 요소 들어있으면 요소 변경될 때마다 실행, [] 없으면 무한반복
     useEffect(() => {
-        console.log("저장된 리스트 " ,savedList);
-        console.log("todotype", typeof(todoList));
+        // console.log("저장된 리스트 " ,savedList);
+        // console.log("todotype", typeof(todoList));
         setSavedList(savedList);
         if(savedList == null || savedList === ""){
             setTodoList([]);
@@ -27,10 +27,8 @@ const TodoListPage = () => {
     },[savedList]);
 
     useEffect(() => {
-        
         localStorage.setItem("todoList", JSON.stringify(todoList));
     },[todoList]);
-    
     
     // inputValue todoList에 추가, input태그 비우기
     const setValue = (e) => {
@@ -54,20 +52,17 @@ const TodoListPage = () => {
         }
     }
 
+    // 할 일 체크 관리
     const checkHandler = (check, index) => {
         console.log(todoList[index].check);
         if(check) {
             todoList[index].check = true;
             setTodoList([...todoList]);
-            // setTodoList(...todoList, todoList[index].check = true);
         } else {
             todoList[index].check = false;
             setTodoList([...todoList]);
-            // setTodoList(...todoList, todoList[index].check = false);
         }
-        // console.log(todoList[index].check);
-        console.log(index);
-    }
+    };
 
     // list item 삭제하기
     const onRemove = itemIndex => {
@@ -77,8 +72,8 @@ const TodoListPage = () => {
         // element는 문자열임
         const new_data = todoList.filter((element, index) => index !== itemIndex)
         setTodoList([...new_data]);
-        // localStorage.setItem("todoList", JSON.stringify(...new_data));
     };
+
 
     return (
         <div className='App'>
@@ -87,8 +82,10 @@ const TodoListPage = () => {
                     <S.DeleteButtonSpan onClick={()=>{
                         localStorage.setItem("todoList", JSON.stringify([]))
                         setTodoList([]);
-                        }}></S.DeleteButtonSpan>
+                        }}>
+                    </S.DeleteButtonSpan>
                 </S.Title>
+
                 <S.AddTodoBox>
                     <S.TodoInput
                         className='task-input'
@@ -97,12 +94,14 @@ const TodoListPage = () => {
                         placeholder='Add New Task'
                         onKeyDown={handleOnKeyPress}
                         onChange={(e) => {setInputValue(e.target.value)}} 
-                        // console.log("here",inputValue.task);}}
-                        // onChange={(e) => console.log(e.target.value)}
                     />
                     <S.AddButton className='submit-task' onClick={setValue}></S.AddButton>
                 </S.AddTodoBox>
-                <TodoBoard todoList={todoList} onRemove={onRemove} checkHandler={checkHandler}/>
+                <TodoBoard 
+                    todoList={todoList} 
+                    onRemove={onRemove} 
+                    checkHandler={checkHandler} 
+                />
             </S.TodoBox>
         </div>
     );
