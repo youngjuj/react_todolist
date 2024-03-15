@@ -4,10 +4,7 @@ import TodoBoard from "../components/TodoBoard";
 
 const TodoListPage = () => {
     // input 태그 value설정
-    const [inputValue, setInputValue] = useState({
-        task: "",
-        check: false,
-    });
+    const [inputValue, setInputValue] = useState("");
 
     // todolist 관리
     const [todoList, setTodoList] = useState([]);
@@ -19,6 +16,7 @@ const TodoListPage = () => {
     // 끝에 [] 있으면 딱 한 번 실행, 또는 안에 요소 들어있으면 요소 변경될 때마다 실행, [] 없으면 무한반복
     useEffect(() => {
         console.log("저장된 리스트 " ,savedList);
+        console.log("todotype", typeof(todoList));
         setSavedList(savedList);
         if(savedList == null || savedList === ""){
             setTodoList([]);
@@ -36,11 +34,11 @@ const TodoListPage = () => {
     
     // inputValue todoList에 추가, input태그 비우기
     const setValue = (e) => {
-        if (inputValue.task === '') {
+        if (inputValue === '') {
             alert('please, Fill in the blank.')
         } else {
-            setTodoList([...todoList, {task:inputValue.task, check: false}]);
-            setInputValue({...inputValue, task:''});
+            setTodoList([...todoList, {task : inputValue, check:false}]);
+            setInputValue('');
         }
         console.log("here todoList",todoList);
         
@@ -56,25 +54,29 @@ const TodoListPage = () => {
         }
     }
 
-    const checkHandler = (data, index) => {
+    const checkHandler = (check, index) => {
         console.log(todoList[index].check);
-        if(data) {
-            // setTodoList(todoList[index].check = true);
-            setTodoList(todoList[index].check = true);
+        if(check) {
+            todoList[index].check = true;
+            setTodoList([...todoList]);
+            // setTodoList(...todoList, todoList[index].check = true);
         } else {
-            setTodoList(todoList[index].check = false);
+            todoList[index].check = false;
+            setTodoList([...todoList]);
+            // setTodoList(...todoList, todoList[index].check = false);
         }
-        console.log(todoList[index].check);
+        // console.log(todoList[index].check);
+        console.log(index);
     }
 
     // list item 삭제하기
-    const onRemove = data => {
+    const onRemove = itemIndex => {
 
         // filter함수도 map처럼 ,로 여러개 보내기 가능
         // index는 항상 두번째 인자로 보내기
-        // element는 문자열임 ㅇㅇ
-        const new_data = todoList.filter((element, index) => index !== data)
-        setTodoList(new_data);
+        // element는 문자열임
+        const new_data = todoList.filter((element, index) => index !== itemIndex)
+        setTodoList([...new_data]);
         // localStorage.setItem("todoList", JSON.stringify(...new_data));
     };
 
@@ -91,11 +93,11 @@ const TodoListPage = () => {
                     <S.TodoInput
                         className='task-input'
                         type='text'
-                        value={inputValue.task}
+                        value={inputValue}
                         placeholder='Add New Task'
                         onKeyDown={handleOnKeyPress}
-                        onChange={(e) => {setInputValue({...inputValue, task:e.target.value}) 
-                        console.log("here",inputValue.task);}}
+                        onChange={(e) => {setInputValue(e.target.value)}} 
+                        // console.log("here",inputValue.task);}}
                         // onChange={(e) => console.log(e.target.value)}
                     />
                     <S.AddButton className='submit-task' onClick={setValue}></S.AddButton>

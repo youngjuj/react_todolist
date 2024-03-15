@@ -7,7 +7,8 @@ function TodoBoard({ todoList, onRemove, checkHandler }) {
     return (
         <div className="task-list">
             <S.TodoList className="task-list">
-                {todoList.map((todoItem, index) => (<TodoItem index={index} todoItem={todoItem} onRemove={onRemove} checkHandler={checkHandler} />))}
+                {todoList.map((todoItem, index) => (
+                <TodoItem index={index} todoItem={todoItem} onRemove={onRemove} checkHandler={checkHandler} />))}
             </S.TodoList>
         </div>
 
