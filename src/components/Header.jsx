@@ -5,8 +5,8 @@ import styled from "styled-components";
 const NavBox = styled.header`
     height: 44px;
     position: sticky;
+    /* top: 230px; */
     margin: 14px;
-    top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
