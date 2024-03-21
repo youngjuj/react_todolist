@@ -20,7 +20,6 @@ const ModalBack = styled.div`
 `;
 
 const ModalBox = styled.div`
-    /* height: 18%; */
     width: 36%;
     min-width: 220px;
     display: inline-block;
@@ -64,23 +63,24 @@ const DeleteModal = (props) => {
     const task = props.task;
     const setOpenModal = props.setOpenModal;
     const openModal = props.openModal;
-    const onRemove = props.onRemove;
+    const removeTodo = props.removeTodo;
 
 
     return (
         <ModalBack className={openModal ? '' : 'none'}>
             <ModalBox>
                 <h4>"{task}" <br/> 항목을 삭제하시겠습니까?</h4>
+                
                 <ModalContent>
                     <ModalBtn className="del_btn" onClick={() => {
-                        console.log(index);
-                        onRemove(index);
+                        removeTodo(index);
                         setOpenModal(false);
                     }}>
                         삭제</ModalBtn>
                     <ModalBtn className="cancel_btn" onClick={() => {
                         setOpenModal(false)
-                    }}> 취소</ModalBtn>
+                    }}> 
+                        취소</ModalBtn>
                 </ModalContent>
             </ModalBox>
         </ModalBack>

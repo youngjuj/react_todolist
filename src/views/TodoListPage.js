@@ -29,15 +29,8 @@ const TodoBox = styled.div`
     overflow: auto;
     color: white;
     &.pc{
-        /* width: 98%; */
         min-width: 480px;
-        justify-content: space-between;
-
     };
-    /* &.screen{
-        width: 98%;
-        min-width: 684px;
-    }; */
     &::-webkit-scrollbar-thumb{
         background-color: black;
     }
@@ -74,7 +67,6 @@ const TodoInput = styled.input`
         border-radius: 0;
         
         &::placeholder {
-            /* color: #fff;  */
             font-weight: 1000;
             font-size: 0.9rem;
         }
@@ -129,33 +121,23 @@ const TodoList = styled.ul`
 const TodoListPage = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 480px)" });
     // const isScreen = useMediaQuery({ query: "(min-width: 1225px)" });
-    const displayType = isMobile ? "mobile" : "pc";
-    // input 태그 value설정
-    const [inputValue, setInputValue] = useState("");
-    // savedList 관리
-    const [savedList, setSavedList] = useState(localStorage.getItem("todoList"));
-    // todolist 관리
-    const [todoList, setTodoList] = useState([]);
+    const displayType = isMobile ? "mobile" : "pc";     // 화면크기에 따른 반응형
+    const [inputValue, setInputValue] = useState("");   // input창에 입력된 값
+    let savedList = localStorage.getItem("todoList");   // localstorage에 있는 리스트
+    const [todoList, setTodoList] = useState(
+        savedList == null || savedList === "" ? [] : JSON.parse(savedList)
+    );  // 할 일 배열
 
-    // useState는 비동기 방식이라 바로 반영된 콘솔찍고 싶으면 useEffect로 찍어보기
-    // 끝에 [] 있으면 딱 한 번 실행, 또는 안에 요소 들어있으면 요소 변경될 때마다 실행, [] 없으면 무한반복
-    useEffect(() => {
-        setSavedList(savedList);
-        if (savedList == null || savedList === "") {
-            setTodoList([]);
-        } else {
-            setTodoList(JSON.parse(savedList));
-        }
-        return
-    }, [savedList]);
 
     useEffect(() => {
+        // todoList 변경될 때 마다 localStorage에 저장
         localStorage.setItem("todoList", JSON.stringify(todoList));
         return
     }, [todoList]);
 
-    // inputValue todoList에 추가, input태그 비우기
-    const setValue = (e) => {
+
+    const addTodo = (e) => {
+        // inputValue todoList에 추가, input태그 비우기
         if (inputValue === '') {
             alert('please, Fill in the blank.')
         } else {
@@ -164,30 +146,39 @@ const TodoListPage = () => {
         }
     };
 
-    // input태그 enter키로 입력하기
+
     const handleOnKeyPress = (e) => {
+        // input태그 enter키로 입력하기
         // onKeyDown || onKeyUp은 한글입력시 두 번 입력되는 오류 있
         // 그래서 isComposing & keyCode로 강제 리턴시키는 문제 해결
         if (e.isComposing || e.keyCode === 229) return;
         if (e.key === 'Enter') {
-            setValue();
+            addTodo();
         }
     };
 
-    // 할 일 체크 관리
+
     const checkHandler = (check, index) => {
+        // 할 일 체크 관리
         check ? todoList[index].check = true : todoList[index].check = false;
         setTodoList([...todoList]);
     };
 
-    // list item 삭제하기
+
     const onRemove = itemIndex => {
+        // list item 삭제하기
         // filter함수도 map처럼 ,로 여러개 보내기 가능
         // index는 항상 두번째 인자로 보내기
         // element는 문자열임
         const new_data = todoList.filter((element, index) => index !== itemIndex)
         setTodoList([...new_data]);
     };
+
+    const onEdit = (editTask, itemIndex) => {
+        const new_data = [...todoList];
+        new_data[itemIndex].task = editTask;
+        setTodoList([...new_data]);
+    }
 
 
     return (
@@ -210,7 +201,7 @@ const TodoListPage = () => {
                         onChange={(e) => { setInputValue(e.target.value) }}
                     />
 
-                    <AddButton className='submit-task' onClick={setValue} />
+                    <AddButton className='submit-task' onClick={addTodo} />
                 </AddTodoBox>
 
                 <TodoList className={"task-list " + displayType}>
@@ -221,10 +212,10 @@ const TodoListPage = () => {
                             displayType={displayType}
                             todoItem={todoItem}
                             onRemove={onRemove}
+                            onEdit = {onEdit}
                             checkHandler={checkHandler}
                         />))}
                 </TodoList>
-
 
             </TodoBox>
         </Container>

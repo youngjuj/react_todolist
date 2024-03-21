@@ -7,7 +7,6 @@ const ListItem = styled.li`
         width: 100%;
         min-width: 190px;
         float: left;
-        /* max-width: 500px; */
         border-radius: 4px;
         margin-bottom: 12px;
         display: flex;
@@ -21,18 +20,9 @@ const ListItem = styled.li`
             max-width: 360px;
             padding : 8px;
             margin-right : 1rem;
-            /* justify-content: space-between; */
         }
-        /* &.screen {
-            width: 94%;
-            max-width: 700px;
-            min-width: 200px;
-            padding : 8px;
-            margin-right : 2rem;
-        } */
-
         
-        input {
+        .item-check {
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -47,7 +37,6 @@ const ListItem = styled.li`
             flex-shrink: 0;
             margin-top: 4px;
             appearance: none;
-            
             
             &:hover {
                 border-color: var(--checkbox-color);
@@ -64,12 +53,24 @@ const ListItem = styled.li`
                     text-decoration: line-through rgba(255, 255, 255, 0.8);
                 }
             }
-            
-            
             /* &.screen{
                 padding: 0;
                 margin-right: 10px;
             } */
+        }
+        .task-input{
+            border-right: none;
+            width: 100%;
+            max-width: 240px;
+            padding: 0 4px;
+            outline: none;
+            border: none;
+            /* border-bottom: 1px solid #fff; */
+            background-color: transparent;
+            margin-right: 12px;
+            color: #fff;
+            box-shadow: none;
+            border-radius: 0;
         }
         /* css 적용이 안될 때는 직접쓰자 */
         .task-list-item-label{
@@ -83,10 +84,7 @@ const ListItem = styled.li`
             transition: .2s;
             cursor: pointer;
         }
-    `
-
-const TodoInput = styled.input`
-        outline: none;
+        
     `
 
 const DeleteButtonSpan = styled.span`
@@ -101,42 +99,43 @@ const DeleteButtonSpan = styled.span`
         cursor: pointer;
     `
 
+
 const TodoItem = (props) => {
     const index = props.index;
     const { task, check } = props.todoItem;
     const displayType = props.displayType;
     const onRemove = props.onRemove;
+    const onEdit = props.onEdit;
     const checkHandler = props.checkHandler;
-    const itemCheck = (e) => {
-        if (e.target.checked) {
-            checkHandler(e.target.checked, index);
-        } else {
-            checkHandler(e.target.check, index);
-        }
-    }
     const [openModal, setOpenModal] = useState(false);
-    const open_del_modal = () => {
-        setOpenModal(true)
-    };
-
+    const open_del_modal = () => setOpenModal(true);
 
     return (
-        
-            <ListItem className={"task-list-item " + displayType}>
-                <label className="task-list-item-label">
-                    <TodoInput type="checkbox" checked={check} onChange={itemCheck} />
-                    <span className="task-item" style={{ textDecoration: check ? "line-through" : "" }}>{task}</span>
-                </label>
-                <DeleteButtonSpan onClick={open_del_modal}></DeleteButtonSpan>
+        <>
+        <ListItem className={"task-list-item " + displayType}>
+            <label className="task-list-item-label">
+                <input
+                    className="item-check"
+                    type="checkbox" checked={check}
+                    onChange={(e) => checkHandler(e.target.checked, index)} />
+
+                <span
+                    style={{ textDecoration: check ? "line-through" : "", }}
+                    > {task}
+                </span>
+            </label>
+
+            <DeleteButtonSpan onClick={open_del_modal} />
+            
             <DeleteModal
                 task={task}
                 check={check}
                 index={index}
                 openModal={openModal}
                 setOpenModal={setOpenModal}
-                onRemove={onRemove}
-                />
-            </ListItem>
+                onRemove={onRemove} />
+        </ListItem>
+        </>
     );
 };
 
