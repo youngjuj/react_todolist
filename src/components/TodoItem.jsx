@@ -97,6 +97,10 @@ const DeleteButtonSpan = styled.span`
         background-size: 16px;
         background-position: center;
         cursor: pointer;
+        &.edit-btn{
+            background-color: red;
+            background-image: url("https://img.icons8.com/material-outlined/24/000000/edit--v1.png");
+        }
     `
 
 
@@ -107,8 +111,31 @@ const TodoItem = (props) => {
     const onRemove = props.onRemove;
     const onEdit = props.onEdit;
     const checkHandler = props.checkHandler;
+    const [openEdit, setOpenEdit] = useState(false);
+    const [editValue, setEditValue] = useState(task);
     const [openModal, setOpenModal] = useState(false);
     const open_del_modal = () => setOpenModal(true);
+
+
+    const editTodo = (e) => {
+        if(editValue === '' || editValue === task){
+            setOpenEdit(false);
+        } else {
+            onEdit(editValue, index);
+            setOpenEdit(false);
+        }
+    }
+
+    const handleOnKeyPress = (e) => {
+        // input태그 enter키로 입력하기
+        // onKeyDown || onKeyUp은 한글입력시 두 번 입력되는 오류 있
+        // 그래서 isComposing & keyCode로 강제 리턴시키는 문제 해결
+        if (e.isComposing || e.keyCode === 229) return;
+        if (e.key === 'Enter') {
+            editTodo();
+        }
+    };
+    
 
     return (
         <>
@@ -120,13 +147,26 @@ const TodoItem = (props) => {
                     onChange={(e) => checkHandler(e.target.checked, index)} />
 
                 <span
-                    style={{ textDecoration: check ? "line-through" : "", }}
+                    style={{ textDecoration: check ? "line-through" : "", display: openEdit ? "none" : "",}}
                     > {task}
                 </span>
+
+                <input
+                className="task-input"
+                type="text"
+                value={editValue}
+                style={{display: openEdit ? "" : "none"}}
+                onChange={e => setEditValue(e.target.value)}
+                onKeyDown={handleOnKeyPress}
+                />
             </label>
 
+            {/* <DeleteButtonSpan className="edit-btn" onClick={}/> */}
+            {/* <button onClick={() => {setOpenEdit(true)}}>E</button> */}
             <DeleteButtonSpan onClick={open_del_modal} />
+
             
+
             <DeleteModal
                 task={task}
                 check={check}

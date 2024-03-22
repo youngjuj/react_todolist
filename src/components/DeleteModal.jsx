@@ -63,7 +63,7 @@ const DeleteModal = (props) => {
     const task = props.task;
     const setOpenModal = props.setOpenModal;
     const openModal = props.openModal;
-    const removeTodo = props.removeTodo;
+    const onRemove = props.onRemove;
 
 
     return (
@@ -73,7 +73,7 @@ const DeleteModal = (props) => {
                 
                 <ModalContent>
                     <ModalBtn className="del_btn" onClick={() => {
-                        removeTodo(index);
+                        onRemove(index);
                         setOpenModal(false);
                     }}>
                         삭제</ModalBtn>
