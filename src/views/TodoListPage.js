@@ -136,8 +136,8 @@ const TodoListPage = () => {
     }, [todoList]);
 
 
+    /**  inputValue todoList에 추가, input태그 비우기 */
     const addTodo = (e) => {
-        // inputValue todoList에 추가, input태그 비우기
         if (inputValue === '') {
             alert('please, Fill in the blank.')
         } else {
@@ -146,9 +146,8 @@ const TodoListPage = () => {
         }
     };
 
-
+    /** input태그 enter키로 입력하기 */
     const handleOnKeyPress = (e) => {
-        // input태그 enter키로 입력하기
         // onKeyDown || onKeyUp은 한글입력시 두 번 입력되는 오류 있
         // 그래서 isComposing & keyCode로 강제 리턴시키는 문제 해결
         if (e.isComposing || e.keyCode === 229) return;
@@ -157,16 +156,14 @@ const TodoListPage = () => {
         }
     };
 
-
+    /** 할 일 체크 관리 */
     const checkHandler = (check, index) => {
-        // 할 일 체크 관리
         check ? todoList[index].check = true : todoList[index].check = false;
         setTodoList([...todoList]);
     };
 
-
+    /** todoList 아이템 삭제하기 */
     const onRemove = itemIndex => {
-        // list item 삭제하기
         // filter함수도 map처럼 ,로 여러개 보내기 가능
         // index는 항상 두번째 인자로 보내기
         // element는 문자열임
@@ -174,6 +171,7 @@ const TodoListPage = () => {
         setTodoList([...new_data]);
     };
 
+    /** 할 일 수정하기 */
     const onEdit = (editTask, itemIndex) => {
         const new_data = [...todoList];
         new_data[itemIndex].task = editTask;

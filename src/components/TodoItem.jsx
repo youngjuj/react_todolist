@@ -88,7 +88,6 @@ const ListItem = styled.li`
     `
 
 const DeleteButtonSpan = styled.span`
-        margin-left: auto;
         display: block;
         width: 16px;
         height: 16px;
@@ -98,6 +97,7 @@ const DeleteButtonSpan = styled.span`
         background-position: center;
         cursor: pointer;
         &.edit-btn{
+            margin-left: auto;
             background-color: red;
             background-image: url("https://img.icons8.com/material-outlined/24/000000/edit--v1.png");
         }
@@ -152,17 +152,18 @@ const TodoItem = (props) => {
                 </span>
 
                 <input
-                className="task-input"
-                type="text"
-                value={editValue}
-                style={{display: openEdit ? "" : "none"}}
-                onChange={e => setEditValue(e.target.value)}
-                onKeyDown={handleOnKeyPress}
+                    className="task-input"
+                    type="text"
+                    value={editValue}
+                    style={{display: openEdit ? "" : "none"}}
+                    onChange={e => setEditValue(e.target.value)}
+                    onKeyDown={handleOnKeyPress}
                 />
             </label>
 
             {/* <DeleteButtonSpan className="edit-btn" onClick={}/> */}
-            {/* <button onClick={() => {setOpenEdit(true)}}>E</button> */}
+            <DeleteButtonSpan className="edit-btn" onClick={() => {
+                setOpenEdit(!openEdit)}}></DeleteButtonSpan>
             <DeleteButtonSpan onClick={open_del_modal} />
 
             
